@@ -40,7 +40,10 @@ main()
     trapinithart();   // install kernel trap vector
     plicinithart();   // ask PLIC for device interrupts
   }
-
+  log_message(1,"Welcome to AUT MCS Principles of Operating Systems Course.This message is from" 
+"a custom logger implemented by student_number_1 and student_number_2");
+  log_message(2,"This is a test warning message for the custom logger");
+  log_message(3," This is a test error message for the custom logger");  
   scheduler();        
 }
 #include "custom-logger.h"
