@@ -3,6 +3,7 @@
 #include "kernel/types.h"
 #include "user/user.h"
 #include "kernel/fcntl.h"
+#include <string.h>
 
 // Parsed command representation
 #define EXEC 1
@@ -99,7 +100,7 @@ void runcmd(struct cmd *cmd)
             while (*p)
             {
               const char *pos = strstr(p, "os");
-              if (pos == '\0')
+              if (pos == NULL)
               {
                 printf("%s", p);
                 break;
