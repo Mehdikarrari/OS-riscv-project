@@ -4,7 +4,7 @@
 #include "defs.h" 
  
 void log_message(int level, const char *message) { 
-    if(level == 1) {
+    if(level == 3) {
         printf("INFO-%s",message);
     }
     else if(level == 2) {
