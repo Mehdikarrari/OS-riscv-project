@@ -3,6 +3,7 @@
 #include "memlayout.h"
 #include "riscv.h"
 #include "defs.h"
+#include "custom-logger.h"
 
 volatile static int started = 0;
 
@@ -46,4 +47,3 @@ main()
   log_message(1," This is a test error message for the custom logger");  
   scheduler();        
 }
-#include "custom-logger.h"
