@@ -3,7 +3,6 @@
 #include "kernel/types.h"
 #include "user/user.h"
 #include "kernel/fcntl.h"
-#include <string.h>
 
 // Parsed command representation
 #define EXEC 1
@@ -79,45 +78,37 @@ void runcmd(struct cmd *cmd)
   default:
     panic("runcmd");
 
-  case EXEC:
-    ecmd = (struct execcmd *)cmd;
-    if (ecmd->argv[0] == 0)
-      exit(1);
-    if (ecmd->argv[0] && strcmp(ecmd->argv[0], "!") == 0)
-    {
-      if (ecmd->argv[1])
+    case EXEC:  
+    ecmd = (struct execcmd *)cmd;  
+    if (ecmd->argv[0] == 0)  
+      exit(1);  
+    if (ecmd->argv[0] && ecmd->argv[0]== "!" )  
+    {  
+      int i=1;
+      while (i<10 && ecmd->argv[i])
       {
-        const char *message = ecmd->argv[1];
-        if (strlen(message) > 512)
+        const char *message = ecmd->argv[i];
+        const char *p = ecmd->argv[i];
+        int len=0;
+        while (p)
         {
-          printf("Message too long\n");
+          len++;
+          p++;
         }
-        else
-        {
-          if (strstr(message, "os") != 0)
-          {
-            const char *p = message;
-            while (*p)
-            {
-              const char *pos = strstr(p, "os");
-              if (pos == NULL)
-              {
-                printf("%s", p);
-                break;
-              }
-              printf("%.*s", (int)(pos - p), p);
-              printf("\033[34m%s\033[0m", "os");
-              p = pos + 2;
-            }
-            printf("\n");
-          }
-          else
-          {
-            printf("> %s >\n", message);
-          }
+        if(len>512){
+          printf("Message too long");
         }
+        if(message=="os"){
+          printf("\033[34m%s\033[0m", "os");
+        }
+        else{
+          printf(message);
+        }
+
+        i++;
       }
-      exit(0);
+        
+      exit(0);  
     }
     exec(ecmd->argv[0], ecmd->argv);
     fprintf(2, "exec %s failed\n", ecmd->argv[0]);
