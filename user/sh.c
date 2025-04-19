@@ -61,6 +61,17 @@ struct cmd *parsecmd(char *);
 void runcmd(struct cmd *) __attribute__((noreturn));
 
 // Execute cmd.  Never returns.
+int my_strcmp(const char *str1, const char *str2) {  
+  while (*str1 != '\0' && *str2 != '\0') {  
+      if (*str1 != *str2) {  
+          return *str1 - *str2;  
+      }  
+      str1++;  
+      str2++;  
+  }  
+  return *str1 - *str2;  
+} 
+ 
 void runcmd(struct cmd *cmd)
 {
   int p[2];
@@ -81,39 +92,37 @@ void runcmd(struct cmd *cmd)
     case EXEC:  
     ecmd = (struct execcmd *)cmd;  
     if (ecmd->argv[0] == 0)  
-      exit(1);  
-    if (ecmd->argv[0] && ecmd->argv[0]== "!" )  
+        exit(1);  
+    if (ecmd->argv[0] && my_strcmp(ecmd->argv[0], "!") == 0)  
     {  
-      int i=1;
-      while (i<10 && ecmd->argv[i])
-      {
-        const char *message = ecmd->argv[i];
-        const char *p = ecmd->argv[i];
-        int len=0;
-        while (p)
-        {
-          len++;
-          p++;
-        }
-        if(len>512){
-          printf("Message too long");
-        }
-        if(message=="os"){
-          printf("\033[34m%s\033[0m", "os");
-        }
-        else{
-          printf(message);
-        }
+        int i = 1;  
+        while (i < 10 && ecmd->argv[i]) {  
+            const char *message = ecmd->argv[i];  
+            int len = 0;  
 
-        i++;
-      }
+            while (message[len] != '\0') {  
+                len++;  
+            }  
+
+            if (len > 512) {  
+                printf("Message too long\n");  
+            }  
+
+            if (my_strcmp(message, "os") == 0) {  
+                printf("\033[34m%s\033[0m\n", "os");  
+            } else {  
+                printf("%s\n", message);  
+            }  
+
+            i++;  
+        }  
         
-      exit(0);  
-    }
-    exec(ecmd->argv[0], ecmd->argv);
-    fprintf(2, "exec %s failed\n", ecmd->argv[0]);
-    break;
-
+        exit(0);  
+    }  
+    exec(ecmd->argv[0], ecmd->argv);  
+    fprintf(2, "exec %s failed\n", ecmd->argv[0]);  
+    break;  
+    
   case REDIR:
     rcmd = (struct redircmd *)cmd;
     close(rcmd->fd);
