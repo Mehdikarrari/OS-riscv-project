@@ -112,7 +112,7 @@ void runcmd(struct cmd *cmd)
             if (my_strcmp(message, "os") == 0) {  
                 printf("\033[34m%s\033[0m\n", "os");  
             } else {  
-                printf("%s\n", message);  
+                printf("%s ", message);
             }  
 
             i++;  

@@ -42,7 +42,7 @@ main()
     plicinithart();   // ask PLIC for device interrupts
   }
   log_message(3,"Welcome to AUT MCS Principles of Operating Systems Course.This message is from" 
-"a custom logger implemented by student_number_1 and student_number_2");
+"a custom logger implemented by 40213016_1 and 40212052_2");
   log_message(2,"This is a test warning message for the custom logger");
   log_message(1," This is a test error message for the custom logger");  
   scheduler();        
