@@ -97,9 +97,14 @@ void runcmd(struct cmd *cmd)
         // this block prints the input if the first chararcter of input was '!' and it prints os word in blue color
     if (ecmd->argv[0] && my_strcmp(ecmd->argv[0], "!") == 0)  
     {  
-        int i = 1;  
-        while (i < 10 && ecmd->argv[i]) {  
-            const char *message = ecmd->argv[i];  
+      int j = 1;
+      while (j < 10 && ecmd->argv[j]) {
+      
+        
+          
+        while (ecmd->argv[j]) {  
+            const char *message = ecmd->argv[j];  
+            int i = 0;
             int len = 0;  
 
             while (message[len] != '\0') {  
@@ -110,17 +115,31 @@ void runcmd(struct cmd *cmd)
                 printf("Message too long\n");  
             }  
 
-            if (my_strcmp(message, "os") == 0) {  
-                printf("\033[34m%s\033[0m\n", "os");  
-            } else {  
-                printf("%s ", message);
-            }  
-
+           // if (my_strcmp(message, "os") == 0) {  
+            //    printf("\033[34m%s\033[0m\n", "os");  
+            //} else {  
+             //   printf("%s ", message);
+            //} 
+            int i = 0; 
+            while (message[i] != '\0')
+            {
+              if(message[i] == 'o') {
+                if(message[i+1] == 's'){
+                  printf("\033[34mos\033[0m");
+                  i++;
+                }
+                else 
+                  printf("%c",message[i]);
+              }
+            }
+            printf("%c",message[i]);
             i++;  
         }  
-        
+        printf(" ");
+      }
         exit(0);  
     }  
+
     exec(ecmd->argv[0], ecmd->argv);  
     fprintf(2, "exec %s failed\n", ecmd->argv[0]);  
     break;  
