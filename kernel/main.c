@@ -32,6 +32,11 @@ main()
     userinit();      // first user process
     __sync_synchronize();
     started = 1;
+    //a test for custom_logger
+    log_message(3,"Welcome to AUT MCS Principles of Operating Systems Course.This message is from" 
+      "a custom logger implemented by 40213016_1 and 40212052_2");
+    log_message(2,"This is a test warning message for the custom logger");
+    log_message(1," This is a test error message for the custom logger"); 
   } else {
     while(started == 0)
       ;
@@ -41,9 +46,6 @@ main()
     trapinithart();   // install kernel trap vector
     plicinithart();   // ask PLIC for device interrupts
   }
-  log_message(3,"Welcome to AUT MCS Principles of Operating Systems Course.This message is from" 
-"a custom logger implemented by 40213016_1 and 40212052_2");
-  log_message(2,"This is a test warning message for the custom logger");
-  log_message(1," This is a test error message for the custom logger");  
+   
   scheduler();        
 }

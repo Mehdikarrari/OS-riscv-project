@@ -61,7 +61,7 @@ void panic(char *);
 struct cmd *parsecmd(char *);
 void runcmd(struct cmd *) __attribute__((noreturn));
 
-// Execute cmd.  Never returns.
+//this function compare two strings
 int my_strcmp(const char *str1, const char *str2) {  
   while (*str1 != '\0' && *str2 != '\0') {  
       if (*str1 != *str2) {  
@@ -72,7 +72,7 @@ int my_strcmp(const char *str1, const char *str2) {
   }  
   return *str1 - *str2;  
 } 
- 
+ // Execute cmd.  Never returns.
 void runcmd(struct cmd *cmd)
 {
   int p[2];
@@ -94,6 +94,7 @@ void runcmd(struct cmd *cmd)
     ecmd = (struct execcmd *)cmd;  
     if (ecmd->argv[0] == 0)  
         exit(1);  
+        // this block prints the input if the first chararcter of input was '!' and it prints os word in blue color
     if (ecmd->argv[0] && my_strcmp(ecmd->argv[0], "!") == 0)  
     {  
         int i = 1;  
@@ -180,7 +181,7 @@ void runcmd(struct cmd *cmd)
 
 int getcmd(char *buf, int nbuf)
 {
-  write(2, "$mehdi-mohammad ", 16);
+  write(2, "$mehdi-mohammad ", 16);//add our names to shell
   memset(buf, 0, nbuf);
   gets(buf, nbuf);
   if (buf[0] == 0) // EOF
