@@ -128,10 +128,10 @@ void runcmd(struct cmd *cmd)
                   i++;
                 }
                 else 
-                  printf("%c",message[i]);
+                  printf("%s",message[i]);
               }
               else
-                  printf("%c",message[i]);
+                  printf("%s",message[i]);
               i++;
             }  
         }  
