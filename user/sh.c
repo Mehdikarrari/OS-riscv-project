@@ -120,7 +120,6 @@ void runcmd(struct cmd *cmd)
             //} else {  
              //   printf("%s ", message);
             //} 
-            int i = 0; 
             while (message[i] != '\0')
             {
               if(message[i] == 'o') {
