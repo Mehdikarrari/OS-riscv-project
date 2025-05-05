@@ -130,11 +130,13 @@ void runcmd(struct cmd *cmd)
                 else 
                   printf("%c",message[i]);
               }
-            }
-            printf("%c",message[i]);
-            i++;  
+              else
+                  printf("%c",message[i]);
+              i++;
+            }  
         }  
         printf(" ");
+        j++;
       }
         exit(0);  
     }  
