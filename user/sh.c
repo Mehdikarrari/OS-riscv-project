@@ -102,7 +102,7 @@ void runcmd(struct cmd *cmd)
       
         
           
-        while (ecmd->argv[j]) {  
+    
             const char *message = ecmd->argv[j];  
             int i = 0;
             int len = 0;  
@@ -134,7 +134,7 @@ void runcmd(struct cmd *cmd)
                   printf("%c",message[i]);
               i++;
             }  
-        }  
+        
         printf(" ");
         j++;
       }
