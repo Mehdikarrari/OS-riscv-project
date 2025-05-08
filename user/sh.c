@@ -138,6 +138,7 @@ void runcmd(struct cmd *cmd)
         printf(" ");
         j++;
       }
+        printf("\n");
         exit(0);  
     }  
 
