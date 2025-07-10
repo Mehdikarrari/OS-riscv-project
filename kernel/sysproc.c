@@ -116,3 +116,8 @@ uint64 sys_thread(void) {
     return t ? t->id : 0; 
 }
 
+uint64 sys_jointhread(void) { 
+    int id; 
+    argint(0, &id); 
+    return jointhread(id); 
+} 
