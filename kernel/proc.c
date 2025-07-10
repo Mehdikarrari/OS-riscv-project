@@ -44,18 +44,19 @@ proc_mapstacks(pagetable_t kpgtbl)
 }
 
 // initialize the proc table.
-void
-procinit(void)
-{
-  struct proc *p;
-  
-  initlock(&pid_lock, "nextpid");
-  initlock(&wait_lock, "wait_lock");
-  for(p = proc; p < &proc[NPROC]; p++) {
-      initlock(&p->lock, "proc");
-      p->state = UNUSED;
-      p->kstack = KSTACK((int) (p - proc));
-  }
+
+void procinit(void) 
+{ 
+    struct proc *p; 
+ 
+    initlock(&pid_lock, "nextpid"); 
+    initlock(&wait_lock, "wait_lock"); 
+    for(p = proc; p < &proc[NPROC]; p++) { 
+        initlock(&p->lock, "proc"); 
+        p->state = UNUSED; 
+        p->kstack = KSTACK((int) (p - proc)); 
+        p->current_thread = 0; //Initialize current_thread to indicate no active thread 
+    } 
 }
 
 // Must be called with interrupts disabled,
@@ -702,6 +703,27 @@ procdump(void)
   }
 }
 
+struct thread * 
+initthread(struct proc *p) 
+{ 
+    if (!p->current_thread) { 
+        for (int i = 0; i < NTHREAD; ++i) { 
+            p->threads[i].trapframe = 0; 
+            freethread(&p->threads[i]); 
+        }
+         // Initialize main thread 
+        struct thread *t = &p->threads[0]; 
+        t->id = p->pid; 
+        if ((t->trapframe = (struct trapframe *)kalloc()) == 0) { 
+            freethread(t); 
+            return 0; 
+        } 
+        t->state = THREAD_RUNNING; 
+        p->current_thread = t; 
+    } 
+    return p->current_thread; 
+}
+
 struct thread *allocthread(uint64 start_thread, uint64 stack_address, 
 uint64 arg) { 
     struct proc *p = myproc(); 
@@ -793,26 +815,6 @@ void sleepthread(int n, uint ticks0) {
     thread_schd(myproc()); 
 } 
 
-struct thread * 
-initthread(struct proc *p) 
-{ 
-    if (!p->current_thread) { 
-        for (int i = 0; i < NTHREAD; ++i) { 
-            p->threads[i].trapframe = 0; 
-            freethread(&p->threads[i]); 
-        }
-         // Initialize main thread 
-        struct thread *t = &p->threads[0]; 
-        t->id = p->pid; 
-        if ((t->trapframe = (struct trapframe *)kalloc()) == 0) { 
-            freethread(t); 
-            return 0; 
-        } 
-        t->state = THREAD_RUNNING; 
-        p->current_thread = t; 
-    } 
-    return p->current_thread; 
-}
 
 int 
 thread_schd(struct proc *p) { 
@@ -856,16 +858,3 @@ thread_schd(struct proc *p) {
     return 1; 
 }
 
-void procinit(void) 
-{ 
-    struct proc *p; 
- 
-    initlock(&pid_lock, "nextpid"); 
-    initlock(&wait_lock, "wait_lock"); 
-    for(p = proc; p < &proc[NPROC]; p++) { 
-        initlock(&p->lock, "proc"); 
-        p->state = UNUSED; 
-        p->kstack = KSTACK((int) (p - proc)); 
-        p->current_thread = 0; //Initialize current_thread to indicate no active thread 
-    } 
-}
